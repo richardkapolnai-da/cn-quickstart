@@ -115,6 +115,7 @@ sourceSets {
     main {
         java {
             srcDirs(
+                "$buildDir/generated/source/proto/buf/java",
                 "$projectDir/build/generated-spring/src/main",
                 "$projectDir/build/generated-client/src/main/java",
                 "$projectDir/build/generated-daml-bindings" // TODO: remove this line once daml plugin is used
@@ -150,4 +151,20 @@ protobuf {
             }
         }
     }
+}
+
+val cleanGradleGeneratedProto by tasks.registering(Delete::class) {
+    delete(
+        fileTree("$buildDir/generated/source/proto/main"),
+        fileTree("$buildDir/generated/source/proto/grpc")
+    )
+}
+
+val generateWithBuf by tasks.registering(Exec::class) {
+    dependsOn(cleanGradleGeneratedProto)
+    commandLine("buf", "generate")
+}
+
+tasks.named("compileJava") {
+    dependsOn(generateWithBuf)
 }
