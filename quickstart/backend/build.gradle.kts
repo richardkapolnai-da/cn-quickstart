@@ -11,6 +11,12 @@ plugins {
     id("com.google.protobuf") version "0.9.4"
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
 dependencies {
     implementation(Deps.springBoot.web)
     implementation(Deps.springBoot.jdbc)
