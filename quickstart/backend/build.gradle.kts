@@ -1,14 +1,12 @@
 // Copyright (c) 2025, Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.
 // SPDX-License-Identifier: 0BSD
 
-import com.google.protobuf.gradle.*
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
     application
     id("org.openapi.generator") version "7.7.0"
     id("org.springframework.boot") version "3.4.2"
-    id("com.google.protobuf") version "0.9.4"
 }
 
 java {
@@ -27,10 +25,13 @@ dependencies {
     implementation(Deps.transcode.protoJava)
     implementation(Deps.transcode.protoJson)
 
-    protobuf(Deps.daml.proto)
-    protobuf(Deps.grpc.commonsProto)
+    implementation(Deps.Protobuf.java)
+    implementation(Deps.Protobuf.javaUtil)
+    implementation(Deps.grpc.api)
     implementation(Deps.grpc.stub)
     implementation(Deps.grpc.protobuf)
+    implementation(Deps.grpc.netty)
+
     if (JavaVersion.current().isJava9Compatible()) {
         // Workaround for @javax.annotation.Generated
         // see: https://github.com/grpc/grpc-java/issues/3633
@@ -47,8 +48,6 @@ dependencies {
     implementation(Deps.springBoot.oauth2ResourceServer)
     implementation(Deps.springBoot.security)
     runtimeOnly("org.postgresql:postgresql:42.7.3")
-    runtimeOnly(Deps.grpc.api)
-    runtimeOnly(Deps.grpc.netty)
 
     testImplementation(Deps.springBoot.test)
 }
@@ -141,36 +140,13 @@ tasks.getByName("compileJava").dependsOn(
     "openApiGenerateClient"
 )
 
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.24.0"
-    }
-    plugins {
-        id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:${Deps.grpc.version}"
-        }
-    }
-    generateProtoTasks {
-        ofSourceSet("main").forEach {
-            it.plugins {
-                id("grpc") { }
-            }
-        }
-    }
-}
-
-val cleanGradleGeneratedProto by tasks.registering(Delete::class) {
-    delete(
-        fileTree("$buildDir/generated/source/proto/main"),
-        fileTree("$buildDir/generated/source/proto/grpc")
-    )
-}
 
 val generateWithBuf by tasks.registering(Exec::class) {
-    dependsOn(cleanGradleGeneratedProto)
+    workingDir(project.projectDir)
     commandLine("buf", "generate")
+    outputs.dir("$buildDir/generated/source/proto/buf/java")
 }
 
-tasks.named("compileJava") {
-    dependsOn(generateWithBuf)
+tasks.named<JavaCompile>("compileJava") {
+    dependsOn(tasks.named("generateWithBuf"))
 }

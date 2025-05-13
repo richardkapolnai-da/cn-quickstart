@@ -10,6 +10,12 @@ object Deps {
         val proto get() = "com.daml:ledger-api-proto:$version"
     }
 
+    object Protobuf {
+        const val version = "3.21.12" // Aligns with buf.build/protocolbuffers/java:v21.12
+        val java get() = "com.google.protobuf:protobuf-java:$version"
+        val javaUtil get() = "com.google.protobuf:protobuf-java-util:$version"
+    }
+
     object grpc {
         val version get() = "1.67.1"
         val commonsProto get() = "com.google.api.grpc:proto-google-common-protos:2.42.0"
