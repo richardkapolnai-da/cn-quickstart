@@ -9,12 +9,6 @@ plugins {
     id("org.springframework.boot") version "3.4.2"
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
-}
-
 dependencies {
     implementation(Deps.springBoot.web)
     implementation(Deps.springBoot.jdbc)
