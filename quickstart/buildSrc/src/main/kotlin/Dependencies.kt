@@ -20,7 +20,6 @@ object Deps {
         val version get() = "1.67.1"
         val stub get() = "io.grpc:grpc-stub:$version"
         val protobuf get() = "io.grpc:grpc-protobuf:$version"
-        val api get() = "io.grpc:grpc-api:$version"
         val netty get() = "io.grpc:grpc-netty:$version"
     }
 

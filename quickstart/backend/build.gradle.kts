@@ -21,7 +21,6 @@ dependencies {
 
     implementation(Deps.Protobuf.java)
     implementation(Deps.Protobuf.javaUtil)
-    implementation(Deps.grpc.api)
     implementation(Deps.grpc.stub)
     implementation(Deps.grpc.protobuf)
     implementation(Deps.grpc.netty)
