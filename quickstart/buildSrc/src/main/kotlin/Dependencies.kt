@@ -18,7 +18,6 @@ object Deps {
 
     object grpc {
         val version get() = "1.67.1"
-        val commonsProto get() = "com.google.api.grpc:proto-google-common-protos:2.42.0"
         val stub get() = "io.grpc:grpc-stub:$version"
         val protobuf get() = "io.grpc:grpc-protobuf:$version"
         val api get() = "io.grpc:grpc-api:$version"
