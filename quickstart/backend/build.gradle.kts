@@ -25,6 +25,10 @@ dependencies {
     implementation(Deps.grpc.protobuf)
     implementation(Deps.grpc.netty)
 
+    // TODO move name to Deps
+    implementation("build.buf.gen:richardkapolnai-da_protobufs_grpc_java:1.72.0.1.00000000000000.78d251c9a32d")
+    implementation("build.buf.gen:richardkapolnai-da_protobufs_protocolbuffers_java:31.0.0.1.00000000000000.78d251c9a32d")
+
     if (JavaVersion.current().isJava9Compatible()) {
         // Workaround for @javax.annotation.Generated
         // see: https://github.com/grpc/grpc-java/issues/3633
@@ -48,6 +52,10 @@ dependencies {
 repositories {
     mavenCentral()
     maven(Repositories.sonatype)
+    maven {
+      name = "buf"
+      url = uri("https://buf.build/gen/maven")
+    }
 }
 
 application {
@@ -113,7 +121,6 @@ sourceSets {
     main {
         java {
             srcDirs(
-                "$buildDir/generated/source/proto/buf/java",
                 "$projectDir/build/generated-spring/src/main",
                 "$projectDir/build/generated-client/src/main/java",
                 "$projectDir/build/generated-daml-bindings" // TODO: remove this line once daml plugin is used
@@ -133,13 +140,3 @@ tasks.getByName("compileJava").dependsOn(
     "openApiGenerateClient"
 )
 
-
-val generateWithBuf by tasks.registering(Exec::class) {
-    workingDir(project.projectDir)
-    commandLine("buf", "generate")
-    outputs.dir("$buildDir/generated/source/proto/buf/java")
-}
-
-tasks.named<JavaCompile>("compileJava") {
-    dependsOn(tasks.named("generateWithBuf"))
-}
