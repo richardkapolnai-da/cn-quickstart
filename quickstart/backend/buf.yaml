@@ -1,11 +1,7 @@
-# For details on buf.yaml configuration, visit https://buf.build/docs/configuration/v2/buf-yaml
 version: v2
 modules:
   - path: proto
-    name: buf.build/fieldera/protobufs
-    excludes:
-      # exclude the non ledger api protos
-      - proto/com/digitalasset
+    name: buf.build/richardkapolnai-da/protobufs
 lint:
   use:
     - STANDARD
