@@ -27,7 +27,8 @@ dependencies {
 
     // TODO move name to Deps
     implementation("build.buf.gen:richardkapolnai-da_protobufs_grpc_java:1.67.1.1.00000000000000.78d251c9a32d")
-    // need 21.12... implementation("build.buf.gen:richardkapolnai-da_protobufs_protocolbuffers_java:31.0.0.1.00000000000000.78d251c9a32d")
+    // need protocolbuffers 21.12 to match
+    implementation("build.buf.gen:richardkapolnai-da_protobufs_protocolbuffers_java:21.12.0.1.00000000000000.78d251c9a32d")
 
     if (JavaVersion.current().isJava9Compatible()) {
         // Workaround for @javax.annotation.Generated
